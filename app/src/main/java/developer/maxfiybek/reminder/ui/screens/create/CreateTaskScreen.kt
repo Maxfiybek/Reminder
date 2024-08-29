@@ -67,8 +67,7 @@ private fun CreateTaskToolbar(navController: NavHostController, modifier: Modifi
                 }
                 .fillMaxHeight()
                 .padding(start = 10.dp, end = 14.dp)
-                .size(26.dp)
-                .clip(RoundedCornerShape(25.dp)),
+                .size(26.dp),
             painter = painterResource(id = R.drawable.ic_back_simple),
             tint = Color.White,
             contentDescription = "ic_back"
