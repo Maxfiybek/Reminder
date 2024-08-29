@@ -1,4 +1,4 @@
-package developer.maxfiybek.reminder.ui.screens
+package developer.maxfiybek.reminder.ui.screens.main
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -55,10 +55,7 @@ import developer.maxfiybek.reminder.ui.theme.ColorPrimary
 import developer.maxfiybek.reminder.ui.theme.Primary70
 import developer.maxfiybek.reminder.ui.theme.TaskTextColor
 import developer.maxfiybek.reminder.ui.theme.WeakPrimary
-import developer.maxfiybek.reminder.ui.vm.MainScreenViewModel
 import developer.maxfiybek.reminder.utils.Screens
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @SuppressLint("ModifierParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -160,7 +157,7 @@ fun TasksList(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(top = 20.dp)
+            .padding(top = 52.dp)
     ) {
         LazyColumn(
             userScrollEnabled = true,

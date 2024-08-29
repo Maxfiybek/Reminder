@@ -1,4 +1,4 @@
-package developer.maxfiybek.reminder.ui.vm
+package developer.maxfiybek.reminder.ui.screens.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

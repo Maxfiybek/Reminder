@@ -6,9 +6,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import developer.maxfiybek.reminder.ui.screens.CreateTaskScreen
-import developer.maxfiybek.reminder.ui.screens.MainScreenUi
-import developer.maxfiybek.reminder.ui.screens.SearchScreenUi
+import developer.maxfiybek.reminder.ui.screens.create.CreateTaskScreen
+import developer.maxfiybek.reminder.ui.screens.main.MainScreenUi
+import developer.maxfiybek.reminder.ui.screens.search.SearchScreenUi
 import developer.maxfiybek.reminder.utils.Screens
 
 @Composable

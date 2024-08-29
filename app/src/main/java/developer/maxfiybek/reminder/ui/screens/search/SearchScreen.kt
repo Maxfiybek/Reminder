@@ -1,4 +1,4 @@
-package developer.maxfiybek.reminder.ui.screens
+package developer.maxfiybek.reminder.ui.screens.search
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
