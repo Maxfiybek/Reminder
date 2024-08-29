@@ -4,9 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +16,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
@@ -36,13 +39,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,25 +52,38 @@ import androidx.navigation.NavHostController
 import developer.maxfiybek.reminder.R
 import developer.maxfiybek.reminder.data.db.entity.TaskModelEntity
 import developer.maxfiybek.reminder.ui.theme.ColorPrimary
-import developer.maxfiybek.reminder.ui.theme.ColorWhite
-import developer.maxfiybek.reminder.ui.theme.TaskItemBack
+import developer.maxfiybek.reminder.ui.theme.Primary70
+import developer.maxfiybek.reminder.ui.theme.TaskTextColor
+import developer.maxfiybek.reminder.ui.theme.WeakPrimary
 import developer.maxfiybek.reminder.ui.vm.MainScreenViewModel
+import developer.maxfiybek.reminder.utils.Screens
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @SuppressLint("ModifierParameter", "UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreenUi(
-    context: Context? = null,
+    context: Context,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     val vm = hiltViewModel<MainScreenViewModel>()
+    MainScreenToolbar(navController = navController, vm = vm, context = context)
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainScreenToolbar(
+    navController: NavHostController,
+    vm: MainScreenViewModel,
+    context: Context,
+    modifier: Modifier = Modifier
+) {
     val menuItems = listOf(
-        "Item 1",
-        "Item 2",
-        "Item 3"
+        "Work 1",
+        "Work 2",
+        "Work 3"
     )
     Scaffold(
         topBar = {
@@ -92,7 +107,7 @@ fun MainScreenUi(
                         Icon(
                             imageVector = Icons.Default.MoreVert,
                             contentDescription = "Menu Icon",
-                            tint = Color.White
+                            tint = White
                         )
                     }
                     DropdownMenu(
@@ -118,6 +133,20 @@ fun MainScreenUi(
     ) { _ ->
         val list = vm.dataLis.collectAsState(initial = emptyList()).value
         TasksList(navController = navController, vm, tasksItems = list)
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.Bottom,
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(end = 16.dp, bottom = 30.dp)
+            ) {
+                CreateTaskButton(navController = navController)
+            }
+        }
     }
 }
 
@@ -129,36 +158,39 @@ fun TasksList(
     modifier: Modifier = Modifier
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .fillMaxHeight()
-            .padding(top = 50.dp)
+            .padding(top = 20.dp)
     ) {
         LazyColumn(
             userScrollEnabled = true,
-            modifier = modifier.height(340.dp)
-                .fillMaxWidth()
-                .padding(top = 20.dp),
+            modifier = modifier
+                .fillMaxSize()
+                .padding(top = 4.dp),
         ) {
             items(tasksItems.size) {
-                RecycleItems(model = tasksItems[it])
+                ShowItemsInRecycle(model = tasksItems[it])
             }
         }
     }
 }
 
+@SuppressLint("Range")
 @Composable
-fun RecycleItems(model: TaskModelEntity, modifier: Modifier = Modifier) {
+fun ShowItemsInRecycle(
+    model: TaskModelEntity,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .height(100.dp)
-            .fillMaxHeight(fraction = 200F)
+            .fillMaxHeight(fraction = 100F)
             .padding(10.dp)
             .clip(shape = RoundedCornerShape(10.dp))
-            .background(TaskItemBack)
+            .background(WeakPrimary)
             .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -170,9 +202,11 @@ fun RecycleItems(model: TaskModelEntity, modifier: Modifier = Modifier) {
             Text(
                 modifier = modifier
                     .padding(start = 10.dp),
-                fontStyle = FontStyle.Normal,
-                fontSize = 18.sp,
-                color = ColorWhite,
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold
+                ),
+                fontSize = 16.sp,
+                color = TaskTextColor,
                 text = model.tasksToRemind,
                 maxLines = 5
             )
@@ -180,7 +214,7 @@ fun RecycleItems(model: TaskModelEntity, modifier: Modifier = Modifier) {
                 Icon(
                     tint = Red,
                     modifier = modifier
-                        .padding(end = 20.dp)
+                        .padding(end = 4.dp)
                         .size(28.dp),
                     painter = painterResource(id = R.drawable.ic_important),
                     contentDescription = "important icon"
@@ -192,8 +226,8 @@ fun RecycleItems(model: TaskModelEntity, modifier: Modifier = Modifier) {
                 .padding(start = 20.dp)
                 .fillMaxWidth()
                 .align(Alignment.Start),
-            fontSize = 14.sp,
-            color = White,
+            fontSize = 12.sp,
+            color = TaskTextColor,
             text = model.dateAndTime
         )
     }
@@ -201,21 +235,30 @@ fun RecycleItems(model: TaskModelEntity, modifier: Modifier = Modifier) {
 }
 
 
-@Preview(showBackground = true, showSystemUi = true)
+//@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MainScreenUiPreview() {
-    RecycleItems(
-        model = TaskModelEntity(
-            tasksToRemind = "aajasdasdasda", dateAndTime =
-            "ashh",
-            isImportant = true
-        )
-    )
 }
 
-@SuppressLint("NewApi")
-fun getCurrentTime(): String {
-    val current = LocalDateTime.now()
-    val formatter = DateTimeFormatter.ofPattern("dd:mm:yyyy")
-    return current.format(formatter)
+@Composable
+fun CreateTaskButton(navController: NavHostController, modifier: Modifier = Modifier) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .size(60.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .clickable {
+                navController.navigate(Screens.CreateTask)
+            }
+            .background(Primary70),
+    ) {
+        Icon(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            tint = White,
+            painter = painterResource(id = R.drawable.ic_add),
+            contentDescription = "add icon"
+        )
+    }
 }
