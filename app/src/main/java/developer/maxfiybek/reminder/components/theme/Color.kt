@@ -1,4 +1,4 @@
-package developer.maxfiybek.reminder.ui.theme
+package developer.maxfiybek.reminder.components.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ReminderDao {
     @Insert
-    suspend fun insertWorks(model: TaskModelEntity)
+    suspend fun insertTask(model: TaskModelEntity)
 
     @Delete
     suspend fun deleteWorks(model: TaskModelEntity)

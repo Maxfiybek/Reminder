@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
 import developer.maxfiybek.reminder.navigation.ReminderNav
-import developer.maxfiybek.reminder.ui.theme.ReminderTheme
+import developer.maxfiybek.reminder.components.theme.ReminderTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
