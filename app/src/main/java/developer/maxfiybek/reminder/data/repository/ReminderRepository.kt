@@ -7,4 +7,5 @@ interface ReminderRepository {
     fun getTasksFromDb(): Flow<List<TaskModelEntity>>
     suspend fun insertTaskToDb(model: TaskModelEntity)
     suspend fun deleteTask(model: TaskModelEntity)
+    suspend fun updateTask(model: TaskModelEntity)
 }

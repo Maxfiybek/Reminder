@@ -76,7 +76,6 @@ fun CreateTaskScreen(
             floatingActionButton = {
                 TodoFloatingActionButton(
                     onClick = {
-                        println("onClick")
                         vm.isTaskValidateToSaveDb(
                             TaskModelEntity(
                                 tasksToRemind = text,
@@ -90,7 +89,6 @@ fun CreateTaskScreen(
                                 }
 
                                 is CreateTaskEvent.Validate -> {
-                                    println("validate")
                                     vm.insertTask(it.model)
                                     navController.popBackStack(Screens.CreateTask, true)
                                 }
