@@ -20,7 +20,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -47,7 +46,6 @@ import developer.maxfiybek.reminder.utils.Screens
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("ModifierParameter", "UnusedMaterial3ScaffoldPaddingParameter", "Range")
 @Composable
 fun MainScreenUi(
@@ -89,19 +87,12 @@ fun MainScreenUi(
                     .fillMaxSize()
                     .padding(top = 4.dp),
             ) {
-                items(
-                    items = tasksFromDb,
-                    key = { it }
-                ) { model ->
-                    SwipeToDelete(
-                        item = model,
-                        onDelete = {
-                            vm.deleteTasks(it)
-                        },
-                        onEdited = {
-                            println("Soon...")
-                        })
-                    {
+                items(items = tasksFromDb, key = { it }) { model ->
+                    SwipeToDelete(item = model, onDelete = {
+                        vm.deleteTasks(it)
+                    }, onEdited = {
+                        println("Soon...")
+                    }) {
                         Column(
                             modifier = modifier
                                 .fillMaxWidth()
@@ -152,48 +143,6 @@ fun MainScreenUi(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun ItemPreview(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(120.dp)
-            .padding(10.dp)
-            .clip(RoundedCornerShape(6.dp))
-            .background(WeakPrimary)
-    ) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.75f)
-        ) {
-            Box(
-                modifier = modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(0.85f)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Text(
-                    maxLines = 4, modifier = modifier.padding(10.dp), text = "kjasdjkasbd"
-                )
-            }
-            Icon(
-                tint = Red,
-                modifier = modifier
-                    .padding(18.dp)
-                    .fillMaxHeight(),
-                painter = painterResource(id = R.drawable.ic_important),
-                contentDescription = "important icon"
-            )
-        }
-        Text(
-            fontSize = 11.sp,
-            modifier = modifier.padding(start = 10.dp, top = 4.dp),
-            text = "kjasdjkasbd"
-        )
     }
 }
 
