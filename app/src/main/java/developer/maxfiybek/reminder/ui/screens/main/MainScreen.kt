@@ -3,8 +3,6 @@ package developer.maxfiybek.reminder.ui.screens.main
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,30 +11,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Red
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -67,7 +58,7 @@ fun MainScreenUi(
         floatingActionButton = {
             TodoFloatingActionButton(
                 onClick = { navController.navigate(Screens.CreateTask) },
-                icon = Icons.Default.Add,
+                icon = Icons.Default.Create,
                 contentDescription = "Add Task"
             )
         }
@@ -89,77 +80,99 @@ fun MainScreenUi(
                         modifier = modifier
                             .fillMaxWidth()
                             .height(100.dp)
-                            .fillMaxHeight(fraction = 100F)
                             .padding(10.dp)
-                            .clip(shape = RoundedCornerShape(10.dp))
+                            .clip(RoundedCornerShape(6.dp))
                             .background(WeakPrimary)
-                            .fillMaxWidth()
-                            .verticalScroll(rememberScrollState())
                     ) {
                         Row(
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically,
                             modifier = modifier
-                                .padding(10.dp)
                                 .fillMaxWidth()
+                                .fillMaxHeight(0.75f)
                         ) {
-                            Text(
+                            Box(
                                 modifier = modifier
-                                    .padding(start = 10.dp),
-                                style = TextStyle(
-                                    fontWeight = FontWeight.Bold
-                                ),
-                                fontSize = 16.sp,
-                                color = TaskTextColor,
-                                text = model.tasksToRemind,
-                                maxLines = 5
-                            )
+                                    .fillMaxHeight()
+                                    .fillMaxWidth(0.85f)
+                                    .verticalScroll(rememberScrollState())
+                            ) {
+                                Text(
+                                    fontSize = 14.sp,
+                                    overflow = TextOverflow.Ellipsis,
+                                    color = TaskTextColor,
+                                    maxLines = 4,
+                                    modifier = modifier
+                                        .padding(10.dp),
+                                    text = model.tasksToRemind
+                                )
+                            }
                             if (model.isImportant) {
                                 Icon(
                                     tint = Red,
                                     modifier = modifier
-                                        .padding(end = 4.dp)
-                                        .size(28.dp),
+                                        .padding(18.dp)
+                                        .fillMaxSize(),
                                     painter = painterResource(id = R.drawable.ic_important),
                                     contentDescription = "important icon"
                                 )
                             }
                         }
                         Text(
-                            modifier = modifier
-                                .padding(start = 20.dp)
-                                .fillMaxWidth()
-                                .align(Alignment.Start),
+                            color = Primary70,
                             fontSize = 12.sp,
-                            color = TaskTextColor,
+                            modifier = modifier
+                                .padding(start = 10.dp, bottom = 4.dp),
                             text = model.dateAndTime
                         )
                     }
                 }
             }
-            var isNavigating by remember { mutableStateOf(false) }
+        }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun ItemPreview(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(120.dp)
+            .padding(10.dp)
+            .clip(RoundedCornerShape(6.dp))
+            .background(WeakPrimary)
+    ) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.75f)
+        ) {
             Box(
-                contentAlignment = Alignment.Center,
                 modifier = modifier
-                    .size(60.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .clickable(
-                        enabled = !isNavigating
-                    ) {
-                        isNavigating = true
-                        navController.navigate(Screens.CreateTask)
-                    }
-                    .background(Primary70),
+                    .fillMaxHeight()
+                    .fillMaxWidth(0.85f)
+                    .verticalScroll(rememberScrollState())
             ) {
-                Icon(
+                Text(
+                    maxLines = 4,
                     modifier = modifier
-                        .fillMaxSize()
-                        .padding(8.dp),
-                    tint = White,
-                    painter = painterResource(id = R.drawable.ic_add),
-                    contentDescription = "add icon"
+                        .padding(10.dp),
+                    text = "kjasdjkasbd"
                 )
             }
+            Icon(
+                tint = Red,
+                modifier = modifier
+                    .padding(18.dp)
+                    .fillMaxHeight(),
+                painter = painterResource(id = R.drawable.ic_important),
+                contentDescription = "important icon"
+            )
         }
+        Text(
+            fontSize = 11.sp,
+            modifier = modifier
+                .padding(start = 10.dp, top = 4.dp),
+            text = "kjasdjkasbd"
+        )
     }
 }
