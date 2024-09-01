@@ -24,4 +24,8 @@ class ReminderRepoImpl @Inject constructor(
             dao.deleteWorks(model)
         }
     }
+
+    override suspend fun updateTask(model: TaskModelEntity) {
+        dao.updateTask(model = model)
+    }
 }

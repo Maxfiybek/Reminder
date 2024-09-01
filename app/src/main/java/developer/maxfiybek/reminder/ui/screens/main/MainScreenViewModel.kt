@@ -18,4 +18,10 @@ class MainScreenViewModel @Inject constructor(
             repository.deleteTask(model)
         }
     }
+
+    fun updateTask(model: TaskModelEntity) {
+        viewModelScope.launch {
+            repository.updateTask(model = model)
+        }
+    }
 }
