@@ -6,11 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import developer.maxfiybek.reminder.navigation.ReminderNav
-import developer.maxfiybek.reminder.ui.theme.ReminderTheme
-import developer.maxfiybek.reminder.ui.vm.MainScreenViewModel
+import developer.maxfiybek.reminder.components.theme.ReminderTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -22,11 +20,5 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun ForPreview(modifier: Modifier = Modifier) {
-
 }
 

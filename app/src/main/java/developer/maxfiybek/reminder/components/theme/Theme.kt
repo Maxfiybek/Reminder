@@ -1,4 +1,4 @@
-package developer.maxfiybek.reminder.ui.theme
+package developer.maxfiybek.reminder.components.theme
 
 import android.app.Activity
 import android.os.Build

@@ -1,4 +1,4 @@
-package developer.maxfiybek.reminder.ui.theme
+package developer.maxfiybek.reminder.components.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
