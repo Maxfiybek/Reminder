@@ -8,4 +8,5 @@ interface ReminderRepository {
     suspend fun insertTaskToDb(model: TaskModelEntity)
     suspend fun deleteTask(model: TaskModelEntity)
     suspend fun updateTask(model: TaskModelEntity)
+    suspend fun editTask(newTask: String, newIsImportant: Boolean,id: Int)
 }

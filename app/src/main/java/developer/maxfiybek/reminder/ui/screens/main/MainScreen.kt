@@ -2,6 +2,7 @@ package developer.maxfiybek.reminder.ui.screens.main
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,16 +19,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -36,35 +38,25 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import developer.maxfiybek.reminder.R
+import developer.maxfiybek.reminder.components.EditorDialog
 import developer.maxfiybek.reminder.components.SwipeToDelete
 import developer.maxfiybek.reminder.components.TodoFloatingActionButton
 import developer.maxfiybek.reminder.components.TopBar
 import developer.maxfiybek.reminder.components.theme.Primary70
 import developer.maxfiybek.reminder.components.theme.TaskTextColor
 import developer.maxfiybek.reminder.components.theme.WeakPrimary
+import developer.maxfiybek.reminder.data.db.entity.TaskModelEntity
 import developer.maxfiybek.reminder.utils.Screens
-import me.saket.swipe.SwipeAction
-import me.saket.swipe.SwipeableActionsBox
 
 @SuppressLint("ModifierParameter", "UnusedMaterial3ScaffoldPaddingParameter", "Range")
 @Composable
 fun MainScreenUi(
-    context: Context, navController: NavHostController, modifier: Modifier = Modifier
+    context: Context, navController: NavHostController, modifier: Modifier = Modifier,
 ) {
-    val deleterState = SwipeAction(onSwipe = {
-        println("OnSwipe item")
-    }, icon = { Icons.Default.Delete }, background = Red
-    )
-    val editorState = SwipeAction(onSwipe = {
-        println("OnSwipe item")
-    }, icon = { Icons.Default.Edit }, background = Green
-    )
-
-    SwipeableActionsBox(startActions = listOf(deleterState)) {}
-
-
     val vm = hiltViewModel<MainScreenViewModel>()
     val tasksFromDb = vm.dataList.collectAsState(initial = emptyList()).value
+    var showDialog by remember { mutableStateOf(false) }
+    var taskToEdit by remember { mutableStateOf<TaskModelEntity?>(null) }
     Scaffold(topBar = {
         TopBar(
             title = { Text(text = "Tasks") },
@@ -91,11 +83,17 @@ fun MainScreenUi(
                     items = tasksFromDb,
                     key = { it }
                 ) { model ->
-                    SwipeToDelete(item = model, onDelete = {
-                        vm.deleteTasks(it)
-                    }, onEdited = {
-                        println("Soon...")
-                    }) {
+                    SwipeToDelete(
+                        item = model,
+                        onDelete = {
+                            vm.deleteTasks(it)
+                        },
+                        onEdited = {
+                            showDialog = true
+                            taskToEdit = it
+                        },
+                    )
+                    {
                         Column(
                             modifier = modifier
                                 .fillMaxWidth()
@@ -143,6 +141,23 @@ fun MainScreenUi(
                             )
                         }
                     }
+                }
+            }
+            if (showDialog) {
+                taskToEdit?.let {
+                    EditorDialog(
+                        model = it,
+                        onDismiss = { showDialog = false },
+                        onConfirm = { editedModel ->
+                            vm.updateTask(model = editedModel)
+                            Toast.makeText(
+                                context,
+                                "Task Successfully updated !",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            showDialog = false
+                        }
+                    )
                 }
             }
         }

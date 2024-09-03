@@ -5,10 +5,10 @@ import kotlinx.serialization.Serializable
 object Screens {
 
     @Serializable
-    object Main
+    data object Main
 
     @Serializable
-    object CreateTask
+    data object CreateTask
 
     @Serializable
     data class C(val name: String?, val lastName: String?)

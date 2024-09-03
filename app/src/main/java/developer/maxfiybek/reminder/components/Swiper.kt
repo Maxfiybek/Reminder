@@ -37,13 +37,16 @@ import kotlinx.coroutines.delay
 @Composable
 fun <T> SwipeToDelete(
     item: T,
+    onEditedSuccessFully: (() -> Unit?)? = null,
     onDelete: (T) -> Unit,
     onEdited: (T) -> Unit,
     animation: Int = 500,
-    content: @Composable (T) -> Unit
+    content: @Composable (T) -> Unit,
 ) {
     var isEdited by remember { mutableStateOf(false) }
     var isRemoved by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
+
     val dismissState = rememberDismissState(
         confirmValueChange = { state ->
             when (state) {
@@ -53,6 +56,7 @@ fun <T> SwipeToDelete(
                 }
 
                 DismissValue.DismissedToEnd -> {
+                    onEdited(item)
                     isEdited = true
                     false
                 }
@@ -98,7 +102,7 @@ fun <T> SwipeToDelete(
 @Composable
 fun SwiperBackground(
     swipeDismissState: DismissState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     if (swipeDismissState.dismissDirection == DismissDirection.EndToStart) {
         Box(
