@@ -19,9 +19,9 @@ interface ReminderDao {
     @Query("SELECT * FROM tasks_entity")
     fun getTasks(): Flow<List<TaskModelEntity>>
 
-    @Query("Update tasks_entity Set tasksToRemind = :newWork Where id = :id")
-    suspend fun editTask(newWork: String, id: Int)
+    @Query("Update tasks_entity Set tasksToRemind = :newTask, isImportant = :newIsImportant Where id = :id")
+    suspend fun editTask(newTask: String, newIsImportant: Boolean, id: Int)
 
-    @Update(entity = TaskModelEntity::class)
+    @Update
     suspend fun updateTask(model: TaskModelEntity)
 }

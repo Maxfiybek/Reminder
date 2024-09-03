@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ReminderRepoImpl @Inject constructor(
-    private val dao: ReminderDao
+    private val dao: ReminderDao,
 ) : ReminderRepository {
 
     override fun getTasksFromDb(): Flow<List<TaskModelEntity>> = dao.getTasks()
@@ -28,4 +28,9 @@ class ReminderRepoImpl @Inject constructor(
     override suspend fun updateTask(model: TaskModelEntity) {
         dao.updateTask(model = model)
     }
+
+    override suspend fun editTask(newTask: String, newIsImportant: Boolean, id: Int) {
+        dao.editTask(newTask = newTask, newIsImportant = newIsImportant, id = id)
+    }
+
 }
