@@ -87,7 +87,10 @@ fun MainScreenUi(
                     .fillMaxSize()
                     .padding(top = 4.dp),
             ) {
-                items(items = tasksFromDb, key = { it }) { model ->
+                items(
+                    items = tasksFromDb,
+                    key = { it }
+                ) { model ->
                     SwipeToDelete(item = model, onDelete = {
                         vm.deleteTasks(it)
                     }, onEdited = {
