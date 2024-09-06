@@ -1,14 +1,16 @@
 package developer.maxfiybek.reminder.ui.screens.create
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Checkbox
@@ -23,7 +25,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,8 +39,10 @@ import developer.maxfiybek.reminder.components.TodoFloatingActionButton
 import developer.maxfiybek.reminder.components.TopBar
 import developer.maxfiybek.reminder.components.TopBarIconButton
 import developer.maxfiybek.reminder.components.theme.Primary70
+import developer.maxfiybek.reminder.components.theme.Purple80
 import developer.maxfiybek.reminder.data.db.entity.TaskModelEntity
 import developer.maxfiybek.reminder.utils.Screens
+import developer.maxfiybek.reminder.utils.makeToast
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.text.SimpleDateFormat
@@ -46,10 +52,10 @@ import java.util.Locale
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CreateTaskScreen(
-    context: Context,
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
     val currentTime = Date()
     val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     val formattedDate = formatter.format(currentTime)
@@ -85,7 +91,7 @@ fun CreateTaskScreen(
                         ).onEach {
                             when (it) {
                                 is CreateTaskEvent.Invalidate -> {
-                                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                                    context.makeToast("Please fill all fields")
                                 }
 
                                 is CreateTaskEvent.Validate -> {
@@ -99,11 +105,11 @@ fun CreateTaskScreen(
                     contentDescription = "Add Task"
                 )
             }
-        ) {
+        ) { paddingValues ->
             Column(
                 modifier = modifier
                     .fillMaxSize()
-                    .padding(top = 52.dp)
+                    .padding(paddingValues),
             ) {
                 TextField(
                     value = text,
@@ -111,12 +117,14 @@ fun CreateTaskScreen(
                     label = { Text(text = "To do") },
                     modifier = modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 10.dp, vertical = 10.dp),
+                        .padding(horizontal = 10.dp, vertical = 10.dp)
+                        .background(color = Purple80, shape = RoundedCornerShape(10.dp)),
                     singleLine = true,
                     colors = TextFieldDefaults.colors(
+                        unfocusedIndicatorColor = Color.Transparent,
                         focusedTextColor = Primary70,
                         unfocusedTextColor = Primary70,
-                        cursorColor = Primary70
+                        cursorColor = Primary70,
                     )
                 )
                 Row(

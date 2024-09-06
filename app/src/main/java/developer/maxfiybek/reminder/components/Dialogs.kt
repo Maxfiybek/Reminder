@@ -1,6 +1,7 @@
 package developer.maxfiybek.reminder.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,7 +49,7 @@ fun EditorDialog(
         id = model.id,
         tasksToRemind = updatedTask,
         isImportant = updatedIsImportant,
-        dateAndTime = modifier.getCurrentTime()
+        dateAndTime = getCurrentTime()
     )
     Dialog(
         onDismissRequest = { onDismiss() },
@@ -74,11 +75,13 @@ fun EditorDialog(
                     singleLine = true,
                     shape = RoundedCornerShape(10.dp),
                     modifier = modifier
+                        .border(width = 0.dp, color = Color.Transparent)
                         .fillMaxWidth(),
                     colors = TextFieldDefaults.colors(
                         focusedTextColor = Primary70,
                         unfocusedTextColor = Primary70,
-                        cursorColor = Primary70
+                        cursorColor = Primary70,
+                        unfocusedIndicatorColor = Color.Transparent
                     )
                 )
                 Row(

@@ -1,8 +1,6 @@
 package developer.maxfiybek.reminder.ui.screens.main
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +17,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -47,19 +50,40 @@ import developer.maxfiybek.reminder.components.theme.TaskTextColor
 import developer.maxfiybek.reminder.components.theme.WeakPrimary
 import developer.maxfiybek.reminder.data.db.entity.TaskModelEntity
 import developer.maxfiybek.reminder.utils.Screens
+import developer.maxfiybek.reminder.utils.makeToast
 
 @SuppressLint("ModifierParameter", "UnusedMaterial3ScaffoldPaddingParameter", "Range")
 @Composable
 fun MainScreenUi(
-    context: Context, navController: NavHostController, modifier: Modifier = Modifier,
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
     val vm = hiltViewModel<MainScreenViewModel>()
     val tasksFromDb = vm.dataList.collectAsState(initial = emptyList()).value
     var showDialog by remember { mutableStateOf(false) }
     var taskToEdit by remember { mutableStateOf<TaskModelEntity?>(null) }
+    var isShowMenu by remember { mutableStateOf(false) }
     Scaffold(topBar = {
         TopBar(
             title = { Text(text = "Tasks") },
+            actions = {
+                MainScreenMenu(
+                    isShowMenu = isShowMenu,
+                    onShowOption = { isShowMenu = !isShowMenu },
+                    onItemClicked = {
+                        when (it) {
+                            MenuType.SETTINGS -> {
+                                isShowMenu = !isShowMenu
+                            }
+
+                            MenuType.ABOUT -> {
+                                isShowMenu = !isShowMenu
+                            }
+                        }
+                    }
+                )
+            }
         )
     }, floatingActionButton = {
         TodoFloatingActionButton(
@@ -74,7 +98,6 @@ fun MainScreenUi(
                 .padding(top = 52.dp)
         ) {
             LazyColumn(
-                userScrollEnabled = true,
                 modifier = modifier
                     .fillMaxSize()
                     .padding(top = 4.dp),
@@ -150,11 +173,7 @@ fun MainScreenUi(
                         onDismiss = { showDialog = false },
                         onConfirm = { editedModel ->
                             vm.updateTask(model = editedModel)
-                            Toast.makeText(
-                                context,
-                                "Task Successfully updated !",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            context.makeToast("Model successfully edited")
                             showDialog = false
                         }
                     )
@@ -164,6 +183,36 @@ fun MainScreenUi(
     }
 }
 
+@Composable
+fun MainScreenMenu(
+    onShowOption: () -> Unit,
+    isShowMenu: Boolean = false,
+    onItemClicked: (MenuType) -> Unit = {},
+) {
+    IconButton(onClick = onShowOption) {
+        Icon(Icons.Default.MoreVert, contentDescription = "Menu")
+    }
+    DropdownMenu(
+        expanded = isShowMenu,
+        onDismissRequest = { onShowOption() }
+    ) {
+        DropdownMenuItem(
+            onClick = {
+                onItemClicked(MenuType.SETTINGS)
+            },
+            text = { Text("Settings") }
+        )
+        DropdownMenuItem(
+            onClick = { onItemClicked(MenuType.ABOUT) },
+            text = { Text("About") }
+        )
+    }
+}
+
+enum class MenuType {
+    SETTINGS,
+    ABOUT
+}
 
 
 

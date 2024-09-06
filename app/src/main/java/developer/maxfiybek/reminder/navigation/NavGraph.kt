@@ -1,7 +1,7 @@
 package developer.maxfiybek.reminder.navigation
 
-import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -10,14 +10,15 @@ import developer.maxfiybek.reminder.ui.screens.main.MainScreenUi
 import developer.maxfiybek.reminder.utils.Screens
 
 @Composable
-fun ReminderNav(context: Context) {
+fun ReminderNav() {
     val navController = rememberNavController()
+    val context = LocalContext.current
     NavHost(navController = navController, startDestination = Screens.Main) {
         composable<Screens.Main> {
-            MainScreenUi(context = context, navController = navController)
+            MainScreenUi(navController = navController)
         }
         composable<Screens.CreateTask> {
-            CreateTaskScreen(context = context, navController = navController)
+            CreateTaskScreen(navController = navController)
         }
     }
 }

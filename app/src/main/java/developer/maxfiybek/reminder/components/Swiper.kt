@@ -37,7 +37,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun <T> SwipeToDelete(
     item: T,
-    onEditedSuccessFully: (() -> Unit?)? = null,
+    onEditedS: (() -> Unit?)? = null,
     onDelete: (T) -> Unit,
     onEdited: (T) -> Unit,
     animation: Int = 500,
