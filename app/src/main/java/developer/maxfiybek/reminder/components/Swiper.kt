@@ -127,6 +127,7 @@ fun SwiperBackground(
         }
     } else if (swipeDismissState.dismissDirection == DismissDirection.StartToEnd) {
         Box(
+            contentAlignment = Alignment.CenterStart,
             modifier = modifier
                 .fillMaxSize()
                 .padding(10.dp)

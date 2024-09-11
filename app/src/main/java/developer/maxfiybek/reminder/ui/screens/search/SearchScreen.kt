@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import developer.maxfiybek.reminder.utils.Screens
+import developer.maxfiybek.reminder.navigation.Screens
 
 @Composable
 fun SearchScreenUi(

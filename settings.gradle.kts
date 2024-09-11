@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Reminder"
 include(":app")
-include(":app:mylibrary")

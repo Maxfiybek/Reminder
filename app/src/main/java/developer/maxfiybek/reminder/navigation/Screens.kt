@@ -1,4 +1,4 @@
-package developer.maxfiybek.reminder.utils
+package developer.maxfiybek.reminder.navigation
 
 import kotlinx.serialization.Serializable
 

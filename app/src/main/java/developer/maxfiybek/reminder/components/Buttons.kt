@@ -14,9 +14,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import developer.maxfiybek.reminder.components.theme.Primary70
+import developer.maxfiybek.reminder.data.db.entity.TaskModelEntity
 
 @Composable
 fun TodoFloatingActionButton(
+    item: TaskModelEntity? = null,
     onClick: () -> Unit,
     @DrawableRes iconFromDrawable: Int? = null,
     icon: ImageVector? = null,

@@ -1,4 +1,4 @@
-package developer.maxfiybek.reminder.ui.screens.create
+package developer.maxfiybek.reminder.ui.screens.main
 
 import developer.maxfiybek.reminder.data.db.entity.TaskModelEntity
 

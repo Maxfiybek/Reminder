@@ -88,5 +88,6 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
-    implementation("me.saket.swipe:swipe:1.0.0")
+    //Lotti lib
+    implementation("com.airbnb.android:lottie-compose:6.0.0")
 }

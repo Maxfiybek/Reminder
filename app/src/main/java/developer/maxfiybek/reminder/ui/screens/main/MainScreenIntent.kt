@@ -1,4 +1,4 @@
-package developer.maxfiybek.reminder.ui.screens.create
+package developer.maxfiybek.reminder.ui.screens.main
 
 import android.content.Context
 import developer.maxfiybek.reminder.data.db.entity.TaskModelEntity
@@ -9,7 +9,7 @@ sealed interface MainScreenIntent {
 
     data object OnMenuShow : MainScreenIntent
 
-    data class OnMenuItemClicked(val menuType: MenuType, val context: Context, val uri: String) : MainScreenIntent
+    data class OnMenuItemClicked(val menuType: MenuType, val context: Context) : MainScreenIntent
 
     data object OnFloatingButtonClicked : MainScreenIntent
 

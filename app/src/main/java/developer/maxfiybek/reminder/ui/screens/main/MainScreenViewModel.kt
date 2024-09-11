@@ -12,9 +12,9 @@ import developer.maxfiybek.reminder.data.db.entity.TaskModelEntity
 import developer.maxfiybek.reminder.data.repository.ReminderRepository
 import developer.maxfiybek.reminder.enums.MenuType
 import developer.maxfiybek.reminder.enums.SwipeType
-import developer.maxfiybek.reminder.ui.screens.create.MainScreenIntent
-import developer.maxfiybek.reminder.ui.screens.create.MainScreenState
-import developer.maxfiybek.reminder.utils.Screens
+import developer.maxfiybek.reminder.navigation.Screens
+import developer.maxfiybek.reminder.utils.Constants.IntentMenuNavigations
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -46,6 +46,22 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
+    private fun onMenuItemClickCallBack(menuType: MenuType, context: Context, uri: String) {
+        when (menuType) {
+            MenuType.SOURCE_CODE -> {
+                println("Source menu clicked -> $uri")
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                startActivity(context, intent, null)
+            }
+
+            MenuType.CREATOR -> {
+                println("Creator menu clicked -> $uri")
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                startActivity(context, intent, null)
+            }
+        }
+    }
+
     fun onIntent(intent: MainScreenIntent) {
         when (intent) {
             is MainScreenIntent.OnDialogConfirmedToEdit -> {
@@ -62,31 +78,38 @@ class MainScreenViewModel @Inject constructor(
             }
 
             is MainScreenIntent.OnMenuShow -> {
-                menuStateChange()
+                menuStateChanger()
             }
 
             is MainScreenIntent.OnMenuItemClicked -> {
                 when (intent.menuType) {
                     MenuType.SOURCE_CODE -> {
-                        intentNavigationCallBack(uri = intent.uri, context = intent.context)
+                        onMenuItemClickCallBack(
+                            context = intent.context,
+                            menuType = intent.menuType,
+                            uri = IntentMenuNavigations.SOURCE_CODE
+                        )
                     }
 
                     MenuType.CREATOR -> {
-                        intentNavigationCallBack(uri = intent.uri, context = intent.context)
+                        onMenuItemClickCallBack(
+                            context = intent.context,
+                            menuType = intent.menuType,
+                            uri = IntentMenuNavigations.CREATOR
+                        )
                     }
                 }
+                menuStateChanger()
             }
 
             is MainScreenIntent.OnSwiped -> {
                 when (intent.swipeType) {
                     SwipeType.FROM_LEFT_TO_RIGHT -> {
-                        println("OnSwipe -> FROM_LEFT_TO_RIGHT")
                         getTaskById(intent.id)
                         changeDialogState(true)
                     }
 
                     SwipeType.FROM_RIGHT_TO_LEFT -> {
-                        println("OnSwipe -> FROM_RIGHT_TO_LEFT")
                         deleteTaskById(intent.id)
                     }
                 }
@@ -95,7 +118,7 @@ class MainScreenViewModel @Inject constructor(
     }
 
     private fun getTaskById(id: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             uiState.value.tasksItems.find {
                 it.id == id
             }?.let { model ->
@@ -109,7 +132,7 @@ class MainScreenViewModel @Inject constructor(
     }
 
     private fun deleteTaskById(id: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             uiState.value.tasksItems.find { it.id == id }?.let {
                 repository.deleteTask(it)
             }
@@ -117,7 +140,7 @@ class MainScreenViewModel @Inject constructor(
     }
 
     private fun updateTask(model: TaskModelEntity) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             println("Updated model -> $model")
             repository.updateTask(model)
         }
@@ -131,7 +154,7 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    private fun menuStateChange() {
+    private fun menuStateChanger() {
         _uiState.update {
             it.copy(
                 menuState = !it.menuState
@@ -141,10 +164,5 @@ class MainScreenViewModel @Inject constructor(
 
     private fun sendUiEvent(event: UiEvent) {
         viewModelScope.launch { _uiEvent.send(event) }
-    }
-
-    private fun intentNavigationCallBack(uri: String, context: Context) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-        startActivity(context, intent, null)
     }
 }

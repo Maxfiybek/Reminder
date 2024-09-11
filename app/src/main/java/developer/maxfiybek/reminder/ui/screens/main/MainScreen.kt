@@ -17,10 +17,7 @@ import developer.maxfiybek.reminder.common.UiEvent
 import developer.maxfiybek.reminder.components.EditorDialog
 import developer.maxfiybek.reminder.components.TodoFloatingActionButton
 import developer.maxfiybek.reminder.components.TopBar
-import developer.maxfiybek.reminder.enums.MenuType
-import developer.maxfiybek.reminder.ui.screens.create.MainScreenIntent
-import developer.maxfiybek.reminder.utils.Constants
-import developer.maxfiybek.reminder.utils.Screens
+import developer.maxfiybek.reminder.navigation.Screens
 import developer.maxfiybek.reminder.utils.makeToast
 import kotlinx.coroutines.flow.collectLatest
 
@@ -52,29 +49,13 @@ fun MainScreenUi(
                     MainScreenMenu(
                         isShowMenu = uiState.menuState,
                         onShowOption = { viewModel.onIntent(MainScreenIntent.OnMenuShow) },
-                        onItemClicked = {
-                            when (it) {
-                                MenuType.SOURCE_CODE -> {
-                                    println("Source code clicked")
-                                    viewModel.onIntent(
-                                        MainScreenIntent.OnMenuItemClicked(
-                                            menuType = MenuType.SOURCE_CODE,
-                                            context = context,
-                                            uri = Constants.IntentMenuNavigations.SOURCE_CODE
-                                        )
-                                    )
-                                }
-
-                                MenuType.CREATOR -> {
-                                    viewModel.onIntent(
-                                        MainScreenIntent.OnMenuItemClicked(
-                                            menuType = MenuType.CREATOR,
-                                            context = context,
-                                            uri = Constants.IntentMenuNavigations.CREATOR
-                                        )
-                                    )
-                                }
-                            }
+                        onItemClicked = { menuType ->
+                            viewModel.onIntent(
+                                MainScreenIntent.OnMenuItemClicked(
+                                    context = context,
+                                    menuType = menuType
+                                )
+                            )
                         }
                     )
                 }
