@@ -2,14 +2,14 @@ package developer.maxfiybek.reminder.utils
 
 import kotlinx.serialization.Serializable
 
-object Screens {
+sealed interface Screens {
 
     @Serializable
-    data object Main
+    data object Main : Screens
 
     @Serializable
-    data object CreateTask
+    data object CreateTask : Screens
 
     @Serializable
-    data class C(val name: String?, val lastName: String?)
+    data class C(val name: String?, val lastName: String?) : Screens
 }

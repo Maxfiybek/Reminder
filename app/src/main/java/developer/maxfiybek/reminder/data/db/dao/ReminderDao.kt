@@ -24,4 +24,8 @@ interface ReminderDao {
 
     @Update
     suspend fun updateTask(model: TaskModelEntity)
+
+    @Query("DELETE FROM tasks_entity WHERE id = :id")
+    suspend fun deleteTaskById(id: Int)
+
 }

@@ -31,32 +31,32 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.unit.dp
+import developer.maxfiybek.reminder.data.db.entity.TaskModelEntity
+import developer.maxfiybek.reminder.enums.SwipeType
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T> SwipeToDelete(
     item: T,
-    onEditedS: (() -> Unit?)? = null,
-    onDelete: (T) -> Unit,
-    onEdited: (T) -> Unit,
+    onSwipe: (SwipeType, Int) -> Unit,
     animation: Int = 500,
     content: @Composable (T) -> Unit,
 ) {
     var isEdited by remember { mutableStateOf(false) }
     var isRemoved by remember { mutableStateOf(false) }
-    var showDialog by remember { mutableStateOf(false) }
 
     val dismissState = rememberDismissState(
         confirmValueChange = { state ->
             when (state) {
                 DismissValue.DismissedToStart -> {
+                    onSwipe(SwipeType.FROM_RIGHT_TO_LEFT, (item as TaskModelEntity).id)
                     isRemoved = true
-                    true
+                    false
                 }
 
                 DismissValue.DismissedToEnd -> {
-                    onEdited(item)
+                    onSwipe(SwipeType.FROM_LEFT_TO_RIGHT, (item as TaskModelEntity).id)
                     isEdited = true
                     false
                 }
@@ -86,16 +86,20 @@ fun <T> SwipeToDelete(
         )
     }
 
-    LaunchedEffect(key1 = isRemoved, key2 = isEdited) {
+    LaunchedEffect(isRemoved) {
         if (isRemoved) {
             delay(animation.toLong())
-            onDelete(item)
-        }
-        if (isEdited) {
-            delay(animation.toLong())
-            onEdited(item)
+            onSwipe(SwipeType.FROM_RIGHT_TO_LEFT, (item as TaskModelEntity).id)
         }
     }
+
+    LaunchedEffect(isEdited) {
+        if (isEdited) {
+            delay(animation.toLong())
+            onSwipe(SwipeType.FROM_LEFT_TO_RIGHT, (item as TaskModelEntity).id)
+        }
+    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

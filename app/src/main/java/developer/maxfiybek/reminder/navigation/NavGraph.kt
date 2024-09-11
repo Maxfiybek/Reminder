@@ -12,7 +12,6 @@ import developer.maxfiybek.reminder.utils.Screens
 @Composable
 fun ReminderNav() {
     val navController = rememberNavController()
-    val context = LocalContext.current
     NavHost(navController = navController, startDestination = Screens.Main) {
         composable<Screens.Main> {
             MainScreenUi(navController = navController)

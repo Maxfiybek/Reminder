@@ -33,4 +33,8 @@ class ReminderRepoImpl @Inject constructor(
         dao.editTask(newTask = newTask, newIsImportant = newIsImportant, id = id)
     }
 
+    override suspend fun deleteTaskById(id: Int) {
+        dao.deleteTaskById(id = id)
+    }
+
 }
