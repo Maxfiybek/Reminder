@@ -23,12 +23,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import developer.maxfiybek.reminder.components.theme.Primary70
 import developer.maxfiybek.reminder.components.theme.Purple80
+import developer.maxfiybek.reminder.ui.screens.create.action_intent_event_state.CreateTaskState
 
 @Composable
 fun CreateTaskContent(
     paddingValues: PaddingValues,
     createTaskState: CreateTaskState,
-    onValueChange: (String) -> Unit,
+    onTaskValueChange: (String) -> Unit,
     onCheckedChange: (Boolean) -> Unit,
 ) {
     Column(
@@ -38,7 +39,7 @@ fun CreateTaskContent(
     ) {
         TextField(
             value = createTaskState.tasksToRemind,
-            onValueChange = onValueChange,
+            onValueChange = onTaskValueChange,
             label = { Text(text = "To do") },
             modifier = Modifier
                 .fillMaxWidth()

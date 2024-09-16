@@ -1,15 +1,15 @@
 package developer.maxfiybek.reminder.ui.screens.create
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import developer.maxfiybek.reminder.common.UiEvent
 import developer.maxfiybek.reminder.data.db.entity.TaskModelEntity
 import developer.maxfiybek.reminder.data.repository.ReminderRepository
 import developer.maxfiybek.reminder.navigation.Screens
-import developer.maxfiybek.reminder.utils.makeToast
+import developer.maxfiybek.reminder.ui.screens.create.action_intent_event_state.CreateTaskEvent
+import developer.maxfiybek.reminder.ui.screens.create.action_intent_event_state.CreateTaskIntent
+import developer.maxfiybek.reminder.ui.screens.create.action_intent_event_state.CreateTaskState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,17 +33,24 @@ class CreateTaskViewModel @Inject constructor(
     fun onIntent(intent: CreateTaskIntent) {
         when (intent) {
             is CreateTaskIntent.OnBackPressed -> {
-                popBackStack(intent.navController)
+                sendUiEvent(UiEvent.PopBackStack)
             }
 
             is CreateTaskIntent.OnCreateTask -> {
-                createNewTask(context = intent.context)
-                sendUiEvent(UiEvent.Navigation(Screens.CreateTask))
+                createNewTask()
+            }
+
+            is CreateTaskIntent.OnTaskImportance -> {
+                onCheckedChange(intent.isChecked)
+            }
+
+            is CreateTaskIntent.OnTaskTextChange -> {
+                onValueChange(intent.task)
             }
         }
     }
 
-    private fun createNewTask(context: Context) {
+    private fun createNewTask() {
         viewModelScope.launch(Dispatchers.IO) {
             if (_uiState.value.tasksToRemind.isNotEmpty() && _uiState.value.tasksToRemind.isNotBlank()) {
                 val model = TaskModelEntity(
@@ -52,22 +59,19 @@ class CreateTaskViewModel @Inject constructor(
                     dateAndTime = _uiState.value.dateAndTime,
                 )
                 repository.insertTaskToDb(model)
+                sendUiEvent(UiEvent.PopBackStack)
             } else {
-                context.makeToast("Task bo`sh bo`la olmaydi!")
+                sendUiEvent(UiEvent.Error)
             }
         }
     }
 
-    fun onCheckedChange(isChecked: Boolean) {
+    private fun onCheckedChange(isChecked: Boolean) {
         _uiState.update { it.copy(isImportant = isChecked) }
     }
 
-    fun onValueChange(value: String) {
+    private fun onValueChange(value: String) {
         _uiState.update { it.copy(tasksToRemind = value) }
-    }
-
-    private fun popBackStack(navController: NavHostController) {
-        viewModelScope.launch { navController.popBackStack(Screens.CreateTask, true) }
     }
 
     private fun sendUiEvent(event: UiEvent) {

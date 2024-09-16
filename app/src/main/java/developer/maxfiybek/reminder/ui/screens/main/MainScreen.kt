@@ -37,6 +37,7 @@ fun MainScreenUi(
                 is UiEvent.Navigation -> {
                     navController.navigate(it.screens)
                 }
+                else -> Unit
             }
         }
     }

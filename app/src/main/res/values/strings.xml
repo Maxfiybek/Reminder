@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Reminder</string>
+    <string name="app_name" translatable="false">Reminder</string>
+    <string name="str_tasks">Tasks</string>
+    <string name="str_task_when_empty">Task can`t be empty</string>
 </resources>

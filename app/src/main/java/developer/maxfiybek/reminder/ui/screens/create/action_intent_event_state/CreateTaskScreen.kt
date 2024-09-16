@@ -1,4 +1,4 @@
-package developer.maxfiybek.reminder.ui.screens.create
+package developer.maxfiybek.reminder.ui.screens.create.action_intent_event_state
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -20,6 +21,9 @@ import developer.maxfiybek.reminder.common.UiEvent
 import developer.maxfiybek.reminder.components.TodoFloatingActionButton
 import developer.maxfiybek.reminder.components.TopBar
 import developer.maxfiybek.reminder.components.TopBarIconButton
+import developer.maxfiybek.reminder.ui.screens.create.CreateTaskContent
+import developer.maxfiybek.reminder.ui.screens.create.CreateTaskViewModel
+import developer.maxfiybek.reminder.utils.makeToast
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -30,16 +34,21 @@ fun CreateTaskScreen(
     val context = LocalContext.current
     val viewModel = hiltViewModel<CreateTaskViewModel>()
     val screenState by viewModel.uiState.collectAsStateWithLifecycle()
+    val errorMessage = stringResource(id = R.string.str_task_when_empty)
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect {
             when (it) {
-                is UiEvent.Navigation -> {
-                    navController.popBackStack(it.screens, inclusive = true)
+                is UiEvent.Error -> {
+                    context.makeToast(errorMessage)
                 }
+
+                is UiEvent.PopBackStack -> {
+                    navController.popBackStack()
+                }
+                else -> Unit
             }
         }
     }
-
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -49,33 +58,29 @@ fun CreateTaskScreen(
                     navigationIcon = {
                         TopBarIconButton(
                             imageVectorFromDrawable = R.drawable.ic_back_simple,
-                            onClick = {
-                                viewModel.onIntent(
-                                    CreateTaskIntent.OnBackPressed(navController = navController)
-                                )
-                            }, contentDescription = "Back"
+                            onClick = { viewModel.onIntent(CreateTaskIntent.OnBackPressed) },
+                            contentDescription = "Back"
                         )
                     },
-                    title = { Text(text = "Tasks") },
+                    title = { Text(text = stringResource(id = R.string.str_tasks)) },
                 )
             },
             content = {
                 CreateTaskContent(
                     paddingValues = it,
-                    onCheckedChange = viewModel::onCheckedChange,
-                    onValueChange = viewModel::onValueChange,
+                    onCheckedChange = { onCheckedChange ->
+                        viewModel.onIntent(CreateTaskIntent.OnTaskImportance(onCheckedChange))
+                    },
+                    onTaskValueChange = { onTaskValueChange ->
+                        viewModel.onIntent(CreateTaskIntent.OnTaskTextChange(onTaskValueChange))
+                    },
                     createTaskState = screenState
                 )
             },
             floatingActionButton = {
                 TodoFloatingActionButton(
                     onClick = {
-                        viewModel.onIntent(
-                            CreateTaskIntent.OnCreateTask(
-                                context = context,
-                                navController = navController
-                            )
-                        )
+                        viewModel.onIntent(CreateTaskIntent.OnCreateTask)
                     },
                     icon = Icons.Default.Add,
                     contentDescription = "Add Task"
@@ -84,4 +89,3 @@ fun CreateTaskScreen(
         )
     }
 }
-

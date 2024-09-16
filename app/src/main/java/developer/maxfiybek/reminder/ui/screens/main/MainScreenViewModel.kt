@@ -49,13 +49,11 @@ class MainScreenViewModel @Inject constructor(
     private fun onMenuItemClickCallBack(menuType: MenuType, context: Context, uri: String) {
         when (menuType) {
             MenuType.SOURCE_CODE -> {
-                println("Source menu clicked -> $uri")
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                 startActivity(context, intent, null)
             }
 
             MenuType.CREATOR -> {
-                println("Creator menu clicked -> $uri")
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                 startActivity(context, intent, null)
             }
