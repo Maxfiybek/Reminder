@@ -1,4 +1,4 @@
-package developer.maxfiybek.reminder.ui.screens.main
+package developer.maxfiybek.reminder.ui.screens.main.intent
 
 import android.content.Context
 import developer.maxfiybek.reminder.data.db.entity.TaskModelEntity

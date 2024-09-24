@@ -13,6 +13,8 @@ import developer.maxfiybek.reminder.data.repository.ReminderRepository
 import developer.maxfiybek.reminder.enums.MenuType
 import developer.maxfiybek.reminder.enums.SwipeType
 import developer.maxfiybek.reminder.navigation.Screens
+import developer.maxfiybek.reminder.ui.screens.main.intent.MainScreenIntent
+import developer.maxfiybek.reminder.ui.screens.main.intent.MainScreenState
 import developer.maxfiybek.reminder.utils.Constants.IntentMenuNavigations
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -47,15 +49,17 @@ class MainScreenViewModel @Inject constructor(
     }
 
     private fun onMenuItemClickCallBack(menuType: MenuType, context: Context, uri: String) {
-        when (menuType) {
-            MenuType.SOURCE_CODE -> {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                startActivity(context, intent, null)
-            }
+        viewModelScope.launch(Dispatchers.IO) {
+            when (menuType) {
+                MenuType.SOURCE_CODE -> {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                    startActivity(context, intent, null)
+                }
 
-            MenuType.CREATOR -> {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                startActivity(context, intent, null)
+                MenuType.CREATOR -> {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                    startActivity(context, intent, null)
+                }
             }
         }
     }

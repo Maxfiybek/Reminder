@@ -6,10 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import developer.maxfiybek.reminder.common.UiEvent
 import developer.maxfiybek.reminder.data.db.entity.TaskModelEntity
 import developer.maxfiybek.reminder.data.repository.ReminderRepository
-import developer.maxfiybek.reminder.navigation.Screens
-import developer.maxfiybek.reminder.ui.screens.create.action_intent_event_state.CreateTaskEvent
-import developer.maxfiybek.reminder.ui.screens.create.action_intent_event_state.CreateTaskIntent
-import developer.maxfiybek.reminder.ui.screens.create.action_intent_event_state.CreateTaskState
+import developer.maxfiybek.reminder.ui.screens.create.intent.CreateTaskIntent
+import developer.maxfiybek.reminder.ui.screens.create.intent.CreateTaskState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

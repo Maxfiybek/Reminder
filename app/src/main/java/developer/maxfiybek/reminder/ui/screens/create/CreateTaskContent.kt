@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import developer.maxfiybek.reminder.components.theme.Primary70
 import developer.maxfiybek.reminder.components.theme.Purple80
-import developer.maxfiybek.reminder.ui.screens.create.action_intent_event_state.CreateTaskState
+import developer.maxfiybek.reminder.ui.screens.create.intent.CreateTaskState
 
 @Composable
 fun CreateTaskContent(

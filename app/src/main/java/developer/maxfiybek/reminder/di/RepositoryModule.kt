@@ -13,6 +13,5 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
     @[Provides Singleton]
-    fun provideMainScreenRepository(dao: ReminderDao): ReminderRepository =
-        ReminderRepoImpl(dao)
+    fun provideMainScreenRepository(dao: ReminderDao): ReminderRepository = ReminderRepoImpl(dao)
 }

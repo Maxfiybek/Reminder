@@ -1,4 +1,4 @@
-package developer.maxfiybek.reminder.ui.screens.create.action_intent_event_state
+package developer.maxfiybek.reminder.ui.screens.create
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
@@ -21,8 +21,7 @@ import developer.maxfiybek.reminder.common.UiEvent
 import developer.maxfiybek.reminder.components.TodoFloatingActionButton
 import developer.maxfiybek.reminder.components.TopBar
 import developer.maxfiybek.reminder.components.TopBarIconButton
-import developer.maxfiybek.reminder.ui.screens.create.CreateTaskContent
-import developer.maxfiybek.reminder.ui.screens.create.CreateTaskViewModel
+import developer.maxfiybek.reminder.ui.screens.create.intent.CreateTaskIntent
 import developer.maxfiybek.reminder.utils.makeToast
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -30,9 +29,9 @@ import developer.maxfiybek.reminder.utils.makeToast
 fun CreateTaskScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
+    viewModel: CreateTaskViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val viewModel = hiltViewModel<CreateTaskViewModel>()
     val screenState by viewModel.uiState.collectAsStateWithLifecycle()
     val errorMessage = stringResource(id = R.string.str_task_when_empty)
     LaunchedEffect(Unit) {
@@ -65,9 +64,9 @@ fun CreateTaskScreen(
                     title = { Text(text = stringResource(id = R.string.str_tasks)) },
                 )
             },
-            content = {
+            content = { innerPadding ->
                 CreateTaskContent(
-                    paddingValues = it,
+                    paddingValues = innerPadding,
                     onCheckedChange = { onCheckedChange ->
                         viewModel.onIntent(CreateTaskIntent.OnTaskImportance(onCheckedChange))
                     },

@@ -1,4 +1,4 @@
-package developer.maxfiybek.reminder.ui.screens.create.action_intent_event_state
+package developer.maxfiybek.reminder.ui.screens.create.intent
 
 data class CreateTaskState(
     val errorMessage: String = "",
