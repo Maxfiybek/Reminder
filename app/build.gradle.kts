@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.android.dagger.hilt)
+    alias(libs.plugins.compose.compiler)
     id("kotlin-kapt")
     id ("kotlin-parcelize")
 }

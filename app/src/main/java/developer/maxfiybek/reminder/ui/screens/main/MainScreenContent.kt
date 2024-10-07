@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -122,9 +123,19 @@ fun MainScreenMenu(
     onShowOption: () -> Unit,
     isShowMenu: Boolean = false,
     onItemClicked: (MenuType) -> Unit = {},
+    onSearchClick: () -> Unit = {}
 ) {
+    IconButton(
+        onClick = onSearchClick
+    ) {
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = "search icon"
+        )
+    }
+
     IconButton(onClick = onShowOption) {
-        Icon(Icons.Default.MoreVert, contentDescription = "Menu")
+        Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Menu")
     }
     DropdownMenu(
         expanded = isShowMenu,

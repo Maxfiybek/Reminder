@@ -25,8 +25,7 @@ import kotlinx.coroutines.flow.collectLatest
 @SuppressLint("ModifierParameter", "UnusedMaterial3ScaffoldPaddingParameter", "Range")
 @Composable
 fun MainScreenUi(
-    navController: NavHostController,
-    modifier: Modifier = Modifier,
+    navController: NavHostController
 ) {
     val context = LocalContext.current
     val viewModel = hiltViewModel<MainScreenViewModel>()
